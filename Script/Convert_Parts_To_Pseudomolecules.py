@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+
+#This is from Kono 
 """A simple script to convert the pseudomolecule parts VCF files into full
 pseudomolecule VCF files. Remember that VCF is 1-based, which makes the math
 a lot nicer."""
