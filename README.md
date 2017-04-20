@@ -86,12 +86,12 @@ FT11
 	E.g. 
 	./Convert_Parts_To_Pseudomolecules.py 	/panfs/roc/scratch/llei/GATK_reheader_BAM/MBE_realigned/Genotype_caller/High_confidentVCF/SNPs_concat_50xfilter_Highconf.recode.vcf  >/panfs/roc/scratch/llei/GATK_reheader_BAM/MBE_realigned/Genotype_caller/High_confidentVCF/SNPs_concat_Parts_To_Pseudomolecules_50xfilter_Highconf.recode.vcf
     ```
+    
 -   For your raw vcf files:
-    We can use vcftools to concatenate all the vcf files, but before that we should gzip all the files: 
+    We can use vcftools to concatenate all the vcf files, but before that we should gzip all the files:  
     ```
     E.g. gzip GATK_chr2H_part1.vcf
-    ```
-    ```
+       
     module load vcftools
     
     vcf-concat  GATK_chr1H_part1.vcf.gz\
@@ -109,8 +109,8 @@ FT11
     GATK_chr7H_part1.vcf.gz\
     GATK_chr7H_part2.vcf.gz\
     GATK_chrUn.vcf.gz >GATK_concat.vcf
-    ```
-    ```
+    
+    
     Module load python
     
     ./Convert_Parts_To_Pseudomolecules.py /panfs/roc/scratch/llei/GATK_reheader_BAM/MBE_realigned/Genotype_caller/GATK_concat.vcf >/panfs/roc/scratch/llei/GATK_reheader_BAM/MBE_realigned/Genotype_caller/GATK_concat_Parts_To_Pseudomolecules.vcf
