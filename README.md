@@ -5,18 +5,33 @@ for those samples and call SNPs. Those SNPs can be served as prior SNPs to call 
 
 #Sample name
 Morex
+
 Kindred
+
 Bowman
+
 Bonus
+
 Gull
+
 Harrington
+
 Haruna Nijo
+
 Igri
+
 Borwina
+
 Foma
+
 Steptoe
+
 Vogelsanger Gold
+
 Barke
+
 OUH602
+
 H_spontaneum01
+
 FT11
