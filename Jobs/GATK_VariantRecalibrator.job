@@ -1,0 +1,101 @@
+#!/bin/sh
+
+#PBS -l mem=64gb,nodes=1:ppn=4,walltime=24:00:00 
+#PBS -m abe 
+#PBS -M llei@umn.edu 
+#PBS -q lab
+
+#   The program we are calling for realignment
+PROGRAM=/panfs/roc/groups/9/morrellp/shared/Software/GATK-3.6/GenomeAnalysisTK.jar 
+#Reference file using the whole psudomolecular one rather than the parts one
+REF=/panfs/roc/groups/9/morrellp/shared/References/Reference_Sequences/Barley/Morex/barley_RefSeq_v1.0/150831_barley_pseudomolecules.fasta
+#	The VCF file we want to recalibrate
+TO_RECAL=/panfs/roc/scratch/llei/GATK_reheader_BAM/MBE_realigned/Genotype_caller/sorted_GATK_concat_Parts_To_Pseudomolecules.vcf
+#	the SNPs-only recalibrated file
+#SNP_ONLY=${TO_RECAL/_RawVCF_Long.vcf/_SNP_Recal.vcf}
+SNP_ONLY=/panfs/roc/scratch/llei/GATK_filter_recalibrator/MBE_SAMPLE/MBE_sample_SNP_Recal.vcf
+
+#those two files will be produced when the first running done, please name those two file and put in certain directory
+RecalFile=/panfs/roc/scratch/llei/GATK_filter_recalibrator/MBE_SAMPLE/MBE_sample.SNP_varrecal
+TranchesFile=/panfs/roc/scratch/llei/GATK_filter_recalibrator/MBE_SAMPLE/MBE_sample.SNP_tranches
+
+#	And the VCFs that we need for recalibration and training
+PREV_SNPS=/panfs/roc/scratch/llei/GATK_reheader_BAM/MBE_realigned/Genotype_caller/High_confidentVCF/sorted_SNPs_concat_Parts_To_Pseudomolecules_50xfilter_Highconf.recode.vcf
+#9k file
+NINEK_SNPS=/panfs/roc/groups/9/morrellp/llei/Envro_ass_landrace/9k_SNPs/revised_sorted_9k_masked_90idt.vcf
+
+module load R
+cd /panfs/roc/scratch/llei/GATK_filter_recalibrator/MBE_SAMPLE
+
+#	VariantRecalibrator options
+#		-R Reference
+#		-recalFile Recal_File_Output
+#		-I vcf_to_be_recalibrated
+#		-resource:name,known=T/F,training=T/F,prior=INT File
+#			Use known=true,training=false for high-confidence SNPs, 
+#			like the 9K SNPs. Use known=false,training=true for
+#			the SNPs called in the previous round of SNP calling. These will
+#			be the SNPs called from the first iteration of the SNP calling
+#			pipeline and filtered for quality.
+#			
+#			Prior values are phred quality assigned to the variant being true
+#			for 9k, I choose phred 15 (as per GATK doc)
+#			for first calls, I choose phred 5
+#			for the resequencing SNPs, I choose phred 20
+#		--traches_file Tranches_output
+#		-mode SNP
+#			Recalibrate SNP quality only
+#		-an [field]
+#			where [field] is one in the INFO column of the VCF. It will recalibrate
+#			based on this field. Will use MQ and MQRankSum, probably.
+#
+
+#	Build the recalibration model for SNPs
+_JAVA_OPTIONS="-Xmx63g -XX:MaxPermSize=10g" java -jar $PROGRAM\
+	-T VariantRecalibrator\
+	-an MQ -an MQRankSum -an DP -an ReadPosRankSum\
+	-mode SNP\
+	-resource:9k,known=true,training=true,truth=true,prior=15.0 ${NINEK_SNPS}\
+	-resource:firstrun,known=false,training=true,truth=false,prior=5.0 ${PREV_SNPS}\
+	-input ${TO_RECAL}\
+	-R ${REF}\
+	-recalFile ${RecalFile}\
+	-tranchesFile ${TranchesFile}
+
+#	Now, actually apply it
+#		we use --ts_filter 99.9 to take 99.9% of true positives from the model
+#		which is recommended in the GATK Docs
+_JAVA_OPTIONS="-Xmx63g -XX:MaxPermSize=10g" java -jar $PROGRAM\
+	-T ApplyRecalibration\
+	-R $REF\
+	-input ${TO_RECAL}\
+	-mode SNP\
+	--ts_filter_level 99.9\
+	-recalFile ${RecalFile}\
+	-tranchesFile ${TranchesFile}\
+	-o ${SNP_ONLY}
+
+#	Build the recalibration model for indels
+#_JAVA_OPTIONS="-Xmx15g -XX:MaxPermSize=10g" java -jar $PROGRAM\
+#	-T VariantRecalibrator\
+#	--intervals ${CAPTURE_DESIGN}\
+#	-an MQ -an MQRankSum -an DP -an ReadPosRankSum\
+#	-mode INDEL\
+#	-resource:reseq,known=true,training=true,truth=true,prior=20.0 ${RESEQ_INDELS}\
+#	-input ${SNP_ONLY}\
+#	-R ${REF}\
+#	-recalFile ${TO_RECAL/_RawVCF_Long.vcf/.INDEL_varrecal}\
+#	-tranchesFile ${TO_RECAL/_RawVCF_Long.vcf/.INDEL_tranches}
+
+#	Now, actually apply it
+#		we use --ts_fiqlter 99.9 to take 99.9% of true positives from the model
+#		which is recommended in the GATK Docs
+#_JAVA_OPTIONS="-Xmx15g -XX:MaxPermSize=10g" java -jar $PROGRAM\
+#	-T ApplyRecalibration\
+#	-R $REF\
+#	-input ${SNP_ONLY}\
+#	-mode INDEL\
+#	--ts_filter_level 99.9\
+#	-recalFile ${TO_RECAL/_RawVCF_Long.vcf/.INDEL_varrecal}\
+#	-tranchesFile ${TO_RECAL/_RawVCF_Long.vcf/.INDEL_tranches}\
+#	-o ${ALL_RECAL}
