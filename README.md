@@ -120,6 +120,6 @@ FT11
 - 9k SNPs:
 `/panfs/roc/groups/9/morrellp/llei/Envro_ass_landrace/9k_SNPs/revised_sorted_9k_masked_90idt.vcf`
 
-### Use 9K, MBE and your high confident SNPs as prior to do filter recalibrate for your raw .vcf files use this script
+### Use 9K, MBE and your high confident SNPs as prior to do filter recalibrate for your raw .vcf files use [this script](https://github.com/lilei1/MBE_samples/blob/master/Jobs/GATK_VariantRecalibrator.job)
 
-After you finished this step, you can do filtering indels and use the 50x bed file to do further filtering.
+### After you finished this step, you can do filtering indels and use the 50x bed file to do further filtering. Steps please see 1 and 2 in Creat high confident SNP dataset.
