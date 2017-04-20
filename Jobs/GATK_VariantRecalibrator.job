@@ -5,7 +5,7 @@
 #PBS -M llei@umn.edu 
 #PBS -q lab
 
-#   The program we are calling for realignment
+#   The program we are calling for realignment, and adapted from Kono https://github.com/MorrellLAB/Deleterious_Mutations/blob/master/Job_Scripts/GATK_VariantRecalibrator.job
 PROGRAM=/panfs/roc/groups/9/morrellp/shared/Software/GATK-3.6/GenomeAnalysisTK.jar 
 #Reference file using the whole psudomolecular one rather than the parts one
 REF=/panfs/roc/groups/9/morrellp/shared/References/Reference_Sequences/Barley/Morex/barley_RefSeq_v1.0/150831_barley_pseudomolecules.fasta
