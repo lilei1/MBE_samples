@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+#   This is from Tom Kono (https://github.com/TomJKono/Misc_Utils/blob/master/Filter_VCF.py)
 #   A script to apply various arbitrary filters to a VCF. The three filters
 #   I have included here are genotype quality score, number of heterozygous
 #   samples, number of samples with missing data, and read depth.
