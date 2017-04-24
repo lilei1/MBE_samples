@@ -49,10 +49,14 @@ with open(sys.argv[1]) as f:
                         ad = gt_metadata[1].split(',')
                         if gt == '0/1':
                             ref = float(ad[0])
-                            alt = float(ad[1])
-                            balance = ref/(ref+alt)
-                            if dp != '.':
-                                if int(dp) < mindp or int(dp) > maxdp or abs(0.5 - balance) > mindev:
-                                     #gt = './.'
-                                     tmp[9+geno_index] = ':'.join(['./.'] + tmp[9+geno_index].split(':')[1:])
+                            alt = float(ad[1]) 
+                            if ref+alt !=0:
+                                balance = ref/(ref+alt)                         
+                                if dp != '.':
+                                    if int(dp) < mindp or int(dp) > maxdp or abs(0.5 - balance) > mindev:
+                                         #gt = './.'
+                                         tmp[9+geno_index] = ':'.join(['./.'] + tmp[9+geno_index].split(':')[1:])
+                            else:
+                                tmp[9+geno_index] = ':'.join(['./.'] + tmp[9+geno_index].split(':')[1:])
+                                #sys.stdout.write('\t'.join(tmp) + '\n')
                 sys.stdout.write('\t'.join(tmp) + '\n')
