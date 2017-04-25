@@ -117,7 +117,7 @@ FT11
     ```
 
 -   MBE samples SNPs:
-`/panfs/roc/scratch/llei/GATK_filter_recalibrator/MBE_SAMPLE/MBE_sample_only_SNP_Recal_50xbed.vcf`
+`/panfs/roc/scratch/llei/GATK_filter_recalibrator/MBE_SAMPLE/MBE_sample_only_SNP_Recal_50xbed_heter_missing_filter.vcf`
 
 - 9k SNPs:
 `/panfs/roc/groups/9/morrellp/llei/Envro_ass_landrace/9k_SNPs/revised_sorted_9k_masked_90idt.vcf`
@@ -125,3 +125,15 @@ FT11
 ### Use 9K, MBE and your high confident SNPs as prior to do filter recalibrate for your raw .vcf files use [this script](https://github.com/lilei1/MBE_samples/blob/master/Jobs/GATK_VariantRecalibrator.job)
 
 ### After you finished this step, you can do filtering indels and use the 50x bed file to do further filtering. Steps please see 1 and 2 in Creat high confident SNP dataset.
+
+### Then run this script [HeterozogotesVcfFilter.py](https://github.com/lilei1/MBE_samples/blob/master/Script/HeterozogotesVcfFilter.py) to correct the heterozygotes (treat unbalanced heterozygotes or heterozygotes with super low or high depth reads as missing genotypes).
+```
+e.g.
+./HeterozogotesVcfFilter.py /panfs/roc/scratch/llei/GATK_filter_recalibrator/MBE_SAMPLE/MBE_sample_only_SNP_Recal_50xbed.vcf >/panfs/roc/scratch/llei/GATK_filter_recalibrator/MBE_SAMPLE/MBE_sample_only_SNP_Recal_50xbed_heter_missing.vcf
+```
+
+### Final filter with certain thresholds with [Filter_VCF.py](https://github.com/lilei1/MBE_samples/blob/master/Script/Filter_VCF.py), then you will get the final version of vcf file for the downstream analysis: 
+```
+e.g.
+./Filter_vcf.py /panfs/roc/scratch/llei/GATK_filter_recalibrator/MBE_SAMPLE/MBE_sample_only_SNP_Recal_50xbed_heter_missing.vcf >/panfs/roc/scratch/llei/GATK_filter_recalibrator/MBE_SAMPLE/MBE_sample_only_SNP_Recal_50xbed_heter_missing_filter.vcf
+```
