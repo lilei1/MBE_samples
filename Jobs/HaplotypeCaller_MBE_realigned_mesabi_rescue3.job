@@ -1,0 +1,28 @@
+#!/bin/bash
+#PBS -l mem=252gb,nodes=1:ppn=16,walltime=96:00:00
+#PBS -m abe
+#PBS -M llei@umn.edu
+#PBS -q ram256g
+
+module load java
+
+# Path to the reference
+REF=/panfs/roc/groups/9/morrellp/shared/References/Reference_Sequences/Barley/Morex/barley_RefSeq_v1.0/barley_pseudomolecules_parts.fa
+SAMPLE_LIST=($(cat /panfs/roc/groups/9/morrellp/llei/Inversion/GATK_SNP_call/MBE_realigned_rescue3.list))
+CURRENT_SAMPLE=${SAMPLE_LIST[${PBS_ARRAYID}]}
+SAMPLENAME=$(echo ${CURRENT_SAMPLE} | cut -f 9 -d '/'|cut -f 1 -d '.')
+INFILE=${CURRENT_SAMPLE}
+OUTPUT_DIR=/panfs/roc/scratch/llei/GATK_reheader_BAM/MBE_realigned
+
+export _JAVA_OPTIONS="-Xmx251g"
+java -jar /panfs/roc/groups/9/morrellp/shared/Software/GATK-3.6/GenomeAnalysisTK.jar\
+  -T HaplotypeCaller\
+  -R ${REF}\
+  -I ${INFILE}\
+  -o ${OUTPUT_DIR}/${SAMPLENAME}_RawGLs.g.vcf\
+  -nct 16\
+  --genotyping_mode DISCOVERY\
+  --heterozygosity 0.008\
+  --emitRefConfidence GVCF\
+  -variant_index_type LINEAR\
+  -variant_index_parameter 128000
