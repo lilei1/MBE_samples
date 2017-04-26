@@ -38,9 +38,36 @@ H_spontaneum01
 FT11
 
 ##   Processing samples
+
+### reheader all of the bams
+
+```bash
+e.g. ./Reheader_BAM.sh -s MBE_barley_bam_list -p ILLUMINA -o /panfs/roc/scratch/llei/reheader_BAM/MBE_samples
+```
+
+### Indel realignment (Chaochih did)
+
 ### Haplotype caller:  g. vcf files
 
+For Morex, Barker, Steptoe and Bowman, there are multiple bams, we tried to merge those bam files first but cause certain heterogeneity, so we only picked the biggest bam based on the size and used that as the representative for those samples.
+
+-	index bam before run GATK:
+
+```
+for i in *.bam;do samtools index $i;done
+```
+-	Hyplotype caller by GATK:
+
+```
+qsub -t 0-15 HaplotypeCaller_MBE_realigned_mesabi.job
+qsub -t 0-2 HaplotypeCaller_MBE_realigned_mesabi_rescue3.job
+```
+
 ### Genotype caller: vcf files (15 vcf files )
+
+```
+qsub -t 0-14 genotype_gvcf_mesabi_MBE.job
+```
 
 ### Filter recalibrate:
 
