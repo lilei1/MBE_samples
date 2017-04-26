@@ -1,7 +1,7 @@
 # MBE_samples
 This is for MBE samples from Kono, et al.2016 MBE paper
 Since all of the data from Kono, et al.2016 MBE paper are mapped based on the old reference (contigs), we need to do remapping work
-for those samples and call SNPs. Those SNPs can be served as prior SNPs to call SNP for inversion samples and NAM parents samples.
+for those *16* samples and call SNPs. Those SNPs can be served as prior SNPs to call SNP for inversion samples and NAM parents samples.
 
 ## Sample name
 
@@ -54,7 +54,7 @@ FT11
     ```
     Module load vcftools_ML
 	E.g. vcfintersect -b /panfs/roc/groups/9/morrellp/shared/References/Reference_Sequences/Barley/Morex/captured_50x_partsRef.bed SNPs_chr1H_part1.recode.vcf >SNPs_chr1H_part1_50xfilter.recode.vcf
-	vcfintersect need to install [vcflib](https://github.com/vcflib/vcflib)
+	!!! vcfintersect need to install [vcflib](https://github.com/vcflib/vcflib)
     ```
 	3. Use [Filter_VCF.py](https://github.com/TomJKono/Misc_Utils/blob/master/Filter_VCF.py) to do further filtering:
     ```
