@@ -53,9 +53,10 @@ FT11
 	2. Filter SNPs outside the exon capture region:
     ```
     Module load vcftools_ML
-	E.g. vcfintersect -b /panfs/roc/groups/9/morrellp/shared/References/Reference_Sequences/Barley/Morex/captured_50x_partsRef.bed SNPs_chr1H_part1.recode.vcf >SNPs_chr1H_part1_50xfilter.recode.vcf
-	!!! vcfintersect need to install [vcflib](https://github.com/vcflib/vcflib)
+	E.g. vcfintersect -b /panfs/roc/groups/9/morrellp/shared/References/Reference_Sequences/Barley/Morex/captured_50x_partsRef.bed SNPs_chr1H_part1.recode.vcf >SNPs_chr1H_part1_50xfilter.recode.vcf	
     ```
+    !!! vcfintersect need to install [vcflib](https://github.com/vcflib/vcflib)
+    
 	3. Use [Filter_VCF.py](https://github.com/TomJKono/Misc_Utils/blob/master/Filter_VCF.py) to do further filtering:
     ```
 	E.g. 
