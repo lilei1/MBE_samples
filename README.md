@@ -54,6 +54,7 @@ FT11
     ```
     Module load vcftools_ML
 	E.g. vcfintersect -b /panfs/roc/groups/9/morrellp/shared/References/Reference_Sequences/Barley/Morex/captured_50x_partsRef.bed SNPs_chr1H_part1.recode.vcf >SNPs_chr1H_part1_50xfilter.recode.vcf
+	vcfintersect need to install [vcflib](https://github.com/vcflib/vcflib)
     ```
 	3. Use [Filter_VCF.py](https://github.com/TomJKono/Misc_Utils/blob/master/Filter_VCF.py) to do further filtering:
     ```
@@ -81,7 +82,7 @@ FT11
 		   SNPs_chr7H_part2_50xfilter_Highconf.recode.vcf.gz\
 		   SNPs_chrUn_50xfilter_Highconf.recode.vcf.gz >SNPs_concat_50xfilter_Highconf.recode.vcf
     ```
-	5. Convert the parts file into the psudomolecular position:
+	5. Convert the parts file into the psudomolecular position with [Convert_Parts_To_Pseudomolecules.py]  (https://github.com/lilei1/MBE_samples/blob/master/Script/Convert_Parts_To_Pseudomolecules.py):
     ```
 	E.g. 
 	./Convert_Parts_To_Pseudomolecules.py 	/panfs/roc/scratch/llei/GATK_reheader_BAM/MBE_realigned/Genotype_caller/High_confidentVCF/SNPs_concat_50xfilter_Highconf.recode.vcf  >/panfs/roc/scratch/llei/GATK_reheader_BAM/MBE_realigned/Genotype_caller/High_confidentVCF/SNPs_concat_Parts_To_Pseudomolecules_50xfilter_Highconf.recode.vcf
