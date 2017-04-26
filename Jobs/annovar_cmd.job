@@ -1,0 +1,32 @@
+#!/bin/bash
+
+#PBS -l mem=64gb,nodes=1:ppn=4,walltime=24:00:00 
+#PBS -m abe 
+#PBS -M llei@umn.edu 
+#PBS -q lab
+
+# Set these paths to the locations where you saved the required executable
+# files. See links in the presentation for downloads.
+GTF2GENEPRED=/panfs/roc/groups/9/morrellp/llei/software/annovar/gtfToGenePred
+RETRIEVE=/panfs/roc/groups/9/morrellp/llei/software/annovar/retrieve_seq_from_fasta.pl
+CONVERT=/panfs/roc/groups/9/morrellp/llei/software/annovar/convert2annovar.pl
+ANNOVAR=/panfs/roc/groups/9/morrellp/llei/software/annovar/annotate_variation.pl
+
+# Convert the GTF into 'genePred' format for predicting amino acid sequence
+# impact.
+cd /panfs/roc/groups/9/morrellp/llei/Alex_NAM_PROJECT/MBE_sample_flower_gene
+
+${GTF2GENEPRED} -genePredExt Source_Files/ppdh1.gtf HV_refGene.txt
+# Get the transcript sequences from the GTF, used for translating codons etc.
+${RETRIEVE} --format refGene --seqfile Source_Files/chr2H.fasta HV_refGene.txt --out HV_refGeneMrna.fa
+# Convert the VCF into an ANNOVAR input file
+${CONVERT} --format vcf4 --allsample --withfreq --includeinfo --outfile ppdh1_Annovar_in.txt Source_Files/SNPs_ppdh1.vcf
+
+# Move the HV_* files into a directory, called 'HV'. This is the ANNOVAR
+# annotation database. As far as I know, the filenames have to be formatted
+# in the weird way written into the output files above.
+mkdir -p HV/
+mv HV_* HV/
+
+# Then annotate the variants
+${ANNOVAR} --geneanno --dbtype refGene --buildver HV ppdh1_Annovar_in.txt HV/
