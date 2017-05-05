@@ -1,6 +1,6 @@
 #!/bin/sh
 
-#PBS -l mem=64gb,nodes=1:ppn=4,walltime=24:00:00 
+#PBS -l mem=22gb,nodes=1:ppn=4,walltime=24:00:00 
 #PBS -m abe 
 #PBS -M llei@umn.edu 
 #PBS -q lab
@@ -51,7 +51,7 @@ cd /panfs/roc/scratch/llei/GATK_filter_recalibrator/MBE_SAMPLE
 #
 
 #	Build the recalibration model for SNPs
-_JAVA_OPTIONS="-Xmx63g -XX:MaxPermSize=10g" java -jar $PROGRAM\
+_JAVA_OPTIONS="-Xmx22g -XX:MaxPermSize=10g" java -jar $PROGRAM\
 	-T VariantRecalibrator\
 	-an MQ -an MQRankSum -an DP -an ReadPosRankSum\
 	-mode SNP\
